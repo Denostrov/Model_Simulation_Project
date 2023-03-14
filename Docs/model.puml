@@ -1,0 +1,40 @@
+@startuml
+skinparam groupInheritance 2
+
+left to right direction
+
+together {
+	class	RadarStation
+	class	ControlCenter
+}
+class	Environment
+together {
+	class	LaunchSilo
+	class	Missile
+}
+together {
+	class	ModelDispatcher
+	package Input <<Database>> {
+	
+	}
+	package Output <<Database>> {
+	
+	}
+}
+package VisualizeResults.py <<Rectangle>> {
+
+}
+Input --> ModelDispatcher : Initial conditions
+ModelDispatcher -u-> Environment : Target data\nRadar, Silo, Missile locations
+ModelDispatcher --> LaunchSilo : Radar target data\nControl center orders
+ModelDispatcher -u-> RadarStation : Target data\nControl center orders
+ModelDispatcher -u-> ControlCenter : Radar target data\nRadar, Silo, Missile status
+ModelDispatcher --> Missile : Radar target data
+ModelDispatcher --> Output : Current model condition\nFinal simulation result
+Environment --> ModelDispatcher : Updated target data
+LaunchSilo --> ModelDispatcher : Updated silo status
+RadarStation --> ModelDispatcher : Radar target data\nUpdated radar status
+ControlCenter --> ModelDispatcher : Radar, Silo orders
+Missile --> ModelDispatcher : Updated missile status
+Output --> VisualizeResults.py : Relevant results
+@enduml
